@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 import logger from "../logger";
 
 // CONNECTING TO MONGOOSE (Get Database Url from .env.local)
-const { DATABASE_URL } = process.env;
 
 // connection function
 export const connect = async (schema: any, keySchema: string) => {
+  const { DATABASE_URL } = process.env;
+
   type TResult = {
     result?: {
       conn: typeof mongoose;
