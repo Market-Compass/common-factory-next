@@ -1,0 +1,22 @@
+{
+  "name": "common-abstract-fares-system",
+  "version": "1.0.0",
+  "description": "common-abstract using in fares project",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": ["lib"],
+  "scripts": {
+    "prepare" : "npm run build",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fares-admin",
+  "license": "ISC",
+  "dependencies": {
+    "object-mapper-fares-system": "^1.0.4",
+    "mongoose": "^7.1.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.3"
+  }
+}
