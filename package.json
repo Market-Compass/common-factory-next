@@ -1,6 +1,6 @@
 {
   "name": "common-abstract-fares-system",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "common-abstract using in fares project",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -13,7 +13,7 @@
   "author": "fares-admin",
   "license": "ISC",
   "dependencies": {
-    "object-mapper-fares-system": "^1.0.4",
+    "object-mapper-fares-system": "^1.0.6",
     "mongoose": "^7.1.1"
   },
   "devDependencies": {
