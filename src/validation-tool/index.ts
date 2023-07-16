@@ -14,29 +14,26 @@ export const validate = async <T extends object, E, F>(
   Object.keys(entity).forEach((key) => {
     error = { ...error, [key]: "" };
   });
-  const errorArray = await Promise.all(
-    Object.keys(validateObject).map(async (item) => {
-      if (validateObject[item as keyof typeof validateObject]) {
-        const vFunc = validateObject[
-          item as keyof typeof validateObject
-        ] as TValidateFunction;
-        const errorResult = (await vFunc(
-          error as Record<keyof T, string>,
-          entity[item as keyof T],
-          item as keyof T,
-          request,
-          params
-        )) as Promise<Record<keyof T, string>>;
-        return errorResult;
-      }
-      return {};
-    })
-  );
-  errorArray
-    .filter((item) => Object.keys(item).length > 0)
-    .forEach((item) => {
-      error = { ...error, ...item };
-    });
+  const validateKeys = Object.keys(validateObject);
+  for (let i = 0; i < validateKeys.length; i++) {
+    if (validateObject[validateKeys[i] as keyof typeof validateObject]) {
+      const vFunc = validateObject[
+        validateKeys[i] as keyof typeof validateObject
+      ] as TValidateFunction;
+      const errorResult = (await vFunc(
+        error as Record<keyof T, string>,
+        entity[validateKeys[i] as keyof T],
+        validateKeys[i] as keyof T,
+        request,
+        params
+      )) as Promise<Record<keyof T, string>>;
+      error = {
+        ...error,
+        [`${validateKeys[i]}`]:
+          errorResult[validateKeys[i] as keyof typeof errorResult],
+      };
+    }
+  }
   const isError: boolean =
     Object.keys(error).filter(
       (keyError) => error[keyError as keyof typeof error]
