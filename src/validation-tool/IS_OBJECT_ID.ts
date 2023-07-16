@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { TValidateFunction } from "./type-validation";
 
-export const IS_OBJECT_ID: TValidateFunction = <T extends object>(
+export const IS_OBJECT_ID: TValidateFunction = async <T extends object>(
   error: Record<keyof T, string>,
   value: any,
   key: keyof T

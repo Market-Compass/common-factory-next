@@ -4,27 +4,34 @@ export type ObjectValidator<T extends object> = {
   [key in keyof T]?: TValidateFunction;
 };
 
-export const validate = <T extends object, E, F>(
+export const validate = async <T extends object, E, F>(
   entity: T,
   validateObject: ObjectValidator<T>,
   request?: E,
   params?: F
 ) => {
-  let error: object = {};
+  let error = {} as Record<keyof T, string>;
   Object.keys(entity).forEach((key) => {
     error = { ...error, [key]: "" };
   });
-  Object.keys(validateObject).forEach((item) => {
+  Object.keys(validateObject).forEach(async (item) => {
     if (validateObject[item as keyof typeof validateObject]) {
+      const vFunc = validateObject[
+        item as keyof typeof validateObject
+      ] as TValidateFunction;
+      const errorResult = (await vFunc(
+        // @ts-ignore
+        error as Record<keyof T, string>,
+        entity[item as keyof T],
+        item as keyof T,
+        request,
+        params
+      )) as Promise<Record<keyof T, string>>;
+      // @ts-ignore
       error = {
+        // @ts-ignore
         ...error,
-        ...validateObject[item as keyof typeof validateObject]!(
-          error as Record<keyof T, string>,
-          entity[item as keyof T],
-          item as keyof T,
-          request,
-          params
-        ),
+        ...errorResult,
       };
     }
   });

@@ -4,7 +4,7 @@ const decodeBase64 = (data: string) => {
   return Buffer.from(data, "base64").toString("ascii");
 };
 
-export const IS_PASSWORD: TValidateFunction = <T extends object>(
+export const IS_PASSWORD: TValidateFunction = async <T extends object>(
   error: Record<keyof T, string>,
   value: any,
   key: keyof T

@@ -1,12 +1,12 @@
-import { TValidateFunction } from './type-validation'
+import { TValidateFunction } from "./type-validation";
 
-export const IS_REQUIRED: TValidateFunction = <T extends object>(
+export const IS_REQUIRED: TValidateFunction = async <T extends object>(
   error: Record<keyof T, string>,
   value: any,
   key: keyof T
 ) => {
   if (!value) {
-    return { ...error, [key]: 'required' }
+    return { ...error, [key]: "required" };
   }
-  return { ...error, [key]: '' }
-}
+  return { ...error, [key]: "" };
+};

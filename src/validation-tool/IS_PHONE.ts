@@ -1,17 +1,17 @@
-import { TValidateFunction } from './type-validation'
+import { TValidateFunction } from "./type-validation";
 
-export const IS_PHONE: TValidateFunction = <T extends object>(
+export const IS_PHONE: TValidateFunction = async <T extends object>(
   error: Record<keyof T, string>,
   value: any,
   key: keyof T
 ) => {
-  const PHONE_REGEX = /^(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})$/g
+  const PHONE_REGEX = /^(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})$/g;
   if (!value) {
-    return { ...error, [key]: 'required' }
+    return { ...error, [key]: "required" };
   }
-  const newValue = String(value)
+  const newValue = String(value);
   if (!newValue.match(PHONE_REGEX)) {
-    return { ...error, [key]: 'invalid phone' }
+    return { ...error, [key]: "invalid phone" };
   }
-  return { ...error, [key]: '' }
-}
+  return { ...error, [key]: "" };
+};

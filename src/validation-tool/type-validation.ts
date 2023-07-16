@@ -4,4 +4,4 @@ export type TValidateFunction = <T extends object, E, F>(
   key: keyof T,
   request?: E,
   params?: F
-) => Record<keyof T, string>;
+) => Promise<Record<keyof T, string>>;
