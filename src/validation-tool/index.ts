@@ -4,11 +4,10 @@ export type ObjectValidator<T extends object> = {
   [key in keyof T]?: TValidateFunction;
 };
 
-export const validate = async <T extends object, E, F>(
+export const validate = async <T extends object>(
   entity: T,
   validateObject: ObjectValidator<T>,
-  request?: E,
-  params?: F
+  query?: any
 ) => {
   let error = {} as Record<keyof T, string>;
   Object.keys(entity).forEach((key) => {
@@ -24,8 +23,7 @@ export const validate = async <T extends object, E, F>(
         error as Record<keyof T, string>,
         entity[validateKeys[i] as keyof T],
         validateKeys[i] as keyof T,
-        request,
-        params
+        query
       )) as Promise<Record<keyof T, string>>;
       error = {
         ...error,

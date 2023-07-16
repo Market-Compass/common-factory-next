@@ -1,7 +1,6 @@
-export type TValidateFunction = <T extends object, E, F>(
+export type TValidateFunction = <T extends object>(
   error: Record<keyof T, string>,
   value: any,
   key: keyof T,
-  request?: E,
-  params?: F
+  params?: any
 ) => Promise<Record<keyof T, string>>;
