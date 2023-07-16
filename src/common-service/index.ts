@@ -1,6 +1,5 @@
 import mongoose, { PipelineStage } from "mongoose";
 import { convertValue } from "object-mapper-fares-system";
-import logger from "../logger";
 import { CommonListResult, CommonResponse, PipelineResponse } from "../types";
 
 export class CommonService<T> {
@@ -40,11 +39,7 @@ export class CommonService<T> {
   ): PipelineStage[] {
     const paramKeys = Object.keys(params);
     const entityKeys = Object.keys(entity);
-    let result: PipelineStage.Match = {
-      $match: {
-        $or: [],
-      },
-    };
+    const result: PipelineStage[] = [];
     paramKeys.forEach((paramKey) => {
       if (entityKeys.includes(paramKey)) {
         const paramValue = params[paramKey as keyof typeof params] as string;
@@ -55,29 +50,14 @@ export class CommonService<T> {
             return this.generateValueCondition(keyType, paramKey, thisVal);
           })
           .filter((thisVal) => Object.keys(thisVal).length > 0);
-        valueAndCond.forEach((item) => logger.info([item as any]));
-        result = {
+        result.push({
           $match: {
-            $or: result.$match.$or
-              ? [
-                  ...result.$match.$or,
-                  {
-                    $and: valueAndCond,
-                  },
-                ]
-              : [
-                  {
-                    $and: valueAndCond,
-                  },
-                ],
+            $or: valueAndCond,
           },
-        };
+        });
       }
     });
-    if (result.$match.$or!.length === 0) {
-      return [];
-    }
-    return [result];
+    return result;
   }
 
   generateValueCondition<T extends object>(
