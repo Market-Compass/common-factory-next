@@ -36,8 +36,7 @@ export function convertValue<T>(source: object & any, target: object & any) {
           };
         }
         excludes.push(sourceKeys[i]);
-      }
-      if (typeof source[sourceKeys[i]] === "number") {
+      } else if (typeof source[sourceKeys[i]] === "number") {
         if (typeof target[targetKeys[indexTargetKey]] === "string") {
           result = {
             ...result,
@@ -50,8 +49,7 @@ export function convertValue<T>(source: object & any, target: object & any) {
           };
         }
         excludes.push(sourceKeys[i]);
-      }
-      if (typeof source[sourceKeys[i]] === "string") {
+      } else if (typeof source[sourceKeys[i]] === "string") {
         if (
           typeof target[targetKeys[indexTargetKey]] === "number" &&
           isNumber(source[sourceKeys[i]])
@@ -83,8 +81,7 @@ export function convertValue<T>(source: object & any, target: object & any) {
           result = { ...result, [`${sourceKeys[i]}`]: source[sourceKeys[i]] };
         }
         excludes.push(sourceKeys[i]);
-      }
-      if (typeof source[sourceKeys[i]] === "boolean") {
+      } else if (typeof source[sourceKeys[i]] === "boolean") {
         if (typeof target[targetKeys[indexTargetKey]] === "number") {
           result = {
             ...result,
@@ -99,8 +96,9 @@ export function convertValue<T>(source: object & any, target: object & any) {
           result = { ...result, [`${sourceKeys[i]}`]: source[sourceKeys[i]] };
         }
         excludes.push(sourceKeys[i]);
-      }
-      if (typeof source[sourceKeys[i]] === typeof mongoose.Types.ObjectId) {
+      } else if (
+        typeof source[sourceKeys[i]] === typeof mongoose.Types.ObjectId
+      ) {
         if (typeof target[targetKeys[indexTargetKey]] === "string") {
           result = {
             ...result,

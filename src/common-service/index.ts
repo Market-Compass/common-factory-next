@@ -1,5 +1,5 @@
 import mongoose, { PipelineStage } from "mongoose";
-import { convertValue } from "object-mapper-fares-system";
+import { convertValue } from "../object-mapper";
 import { CommonListResult, CommonResponse, PipelineResponse } from "../types";
 
 export class CommonService<T> {
