@@ -47,7 +47,12 @@ export class CommonService<T> {
         const keyType = typeof entity[paramKey as keyof typeof entity];
         const valueAndCond = values
           .map((thisVal) => {
-            return this.generateValueCondition(keyType, paramKey, thisVal);
+            return this.generateValueCondition(
+              keyType,
+              paramKey,
+              thisVal,
+              entity[paramKey as keyof typeof entity]
+            );
           })
           .filter((thisVal) => Object.keys(thisVal).length > 0);
         result.push({
@@ -63,14 +68,46 @@ export class CommonService<T> {
   generateValueCondition<T extends object>(
     type: keyof T,
     key: string,
-    value: any
+    value: any,
+    valueEntity: any
   ): { [key: string]: any } {
     if (mongoose.isValidObjectId(value)) {
       return { [`${key}`]: new mongoose.Types.ObjectId(value) };
     }
+    if (Array.isArray(valueEntity)) {
+      try {
+        const valueParse = JSON.parse(value);
+        const valueKeys = Object.keys(valueParse);
+        return {
+          $and: valueKeys.map((item) => {
+            return {
+              [`${key}.${item}`]: {
+                $in: [new RegExp(valueParse[item], "g"), `$${key}.${item}`],
+              },
+            };
+          }),
+        };
+      } catch (err) {
+        if (Number.isFinite(Number(value))) {
+          return {
+            [`${key}`]: {
+              $in: [Number(value), `$${key}`],
+            },
+          };
+        }
+        if (typeof value === "string") {
+          return {
+            [`${key}`]: {
+              $in: [new RegExp(value, "g"), `$${key}`],
+            },
+          };
+        }
+        return {};
+      }
+    }
     switch (type) {
       case "string": {
-        return { [`${key}`]: value };
+        return { [`${key}`]: new RegExp(value, "g") };
       }
       case "number": {
         if (!Number.isFinite(Number(value))) {
