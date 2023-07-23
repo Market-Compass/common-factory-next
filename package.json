@@ -1,6 +1,6 @@
 {
   "name": "common-abstract-fares-system",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "common-abstract using in fares project",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

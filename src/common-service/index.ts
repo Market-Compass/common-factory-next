@@ -80,29 +80,46 @@ export class CommonService<T> {
         const valueKeys = Object.keys(valueParse);
         return {
           $and: valueKeys.map((item) => {
-            return {
-              [`${key}.${item}`]: {
-                $in: [new RegExp(valueParse[item], "g"), `$${key}.${item}`],
-              },
-            };
+            if (mongoose.isValidObjectId(value)) {
+              return {
+                [`$${key}.${item}`]: {
+                  $in: [new mongoose.Types.ObjectId(value), `$${key}.${item}`],
+                },
+              };
+            } else if (Number.isFinite(Number(value))) {
+              return {
+                [`$${key}.${item}`]: {
+                  $in: [Number(value), `$${key}.${item}`],
+                },
+              };
+            } else
+              return {
+                [`${key}.${item}`]: {
+                  $in: [new RegExp(valueParse[item], "g"), `$${key}.${item}`],
+                },
+              };
           }),
         };
       } catch (err) {
-        if (Number.isFinite(Number(value))) {
+        if (mongoose.isValidObjectId(value)) {
+          return {
+            [`${key}`]: {
+              $in: [new mongoose.Types.ObjectId(value), `$${key}`],
+            },
+          };
+        } else if (Number.isFinite(Number(value))) {
           return {
             [`${key}`]: {
               $in: [Number(value), `$${key}`],
             },
           };
-        }
-        if (typeof value === "string") {
+        } else if (typeof value === "string") {
           return {
             [`${key}`]: {
               $in: [new RegExp(value, "g"), `$${key}`],
             },
           };
-        }
-        return {};
+        } else return {};
       }
     }
     switch (type) {
