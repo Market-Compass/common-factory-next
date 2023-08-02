@@ -63,26 +63,6 @@ export class CommonService<T> {
         });
       }
     });
-    const findSort = paramKeys.find((item) => item.includes("sort_"));
-    if (
-      findSort &&
-      (String(params[findSort as keyof typeof params]).toUpperCase() ===
-        "DESC" ||
-        String(params[findSort as keyof typeof params]).toUpperCase() === "ASC")
-    ) {
-      const sortField = findSort.split("_")[findSort.split("_").length - 1];
-      if (entityKeys.includes(sortField)) {
-        result.push({
-          $sort: {
-            [sortField]:
-              String(params[findSort as keyof typeof params]).toUpperCase() ===
-              "ASC"
-                ? 1
-                : -1,
-          },
-        });
-      }
-    }
     const findGreater = paramKeys.find((item) => item.includes("greater_"));
     if (
       findGreater &&
@@ -92,7 +72,7 @@ export class CommonService<T> {
         findGreater.split("_")[findGreater.split("_").length - 1];
       if (
         entityKeys.includes(greaterField) &&
-        Number.isFinite(Number(entity[greaterField as keyof typeof entity]))
+        typeof entity[greaterField as keyof typeof entity] === "number"
       ) {
         result.push({
           $match: {
@@ -111,13 +91,33 @@ export class CommonService<T> {
       const lowerField = findLower.split("_")[findLower.split("_").length - 1];
       if (
         entityKeys.includes(lowerField) &&
-        Number.isFinite(Number(entity[lowerField as keyof typeof entity]))
+        typeof entity[lowerField as keyof typeof entity] === "number"
       ) {
         result.push({
           $match: {
             [lowerField]: {
               $lte: Number(params[findLower as keyof typeof params]),
             },
+          },
+        });
+      }
+    }
+    const findSort = paramKeys.find((item) => item.includes("sort_"));
+    if (
+      findSort &&
+      (String(params[findSort as keyof typeof params]).toUpperCase() ===
+        "DESC" ||
+        String(params[findSort as keyof typeof params]).toUpperCase() === "ASC")
+    ) {
+      const sortField = findSort.split("_")[findSort.split("_").length - 1];
+      if (entityKeys.includes(sortField)) {
+        result.push({
+          $sort: {
+            [sortField]:
+              String(params[findSort as keyof typeof params]).toUpperCase() ===
+              "ASC"
+                ? 1
+                : -1,
           },
         });
       }
