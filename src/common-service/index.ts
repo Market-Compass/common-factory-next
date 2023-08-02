@@ -1,6 +1,7 @@
 import mongoose, { PipelineStage } from "mongoose";
-import { convertValue } from "../object-mapper";
 import { CommonListResult, CommonResponse, PipelineResponse } from "../types";
+
+import { convertValue } from "../object-mapper";
 
 export class CommonService<T> {
   repository: T;
@@ -62,6 +63,65 @@ export class CommonService<T> {
         });
       }
     });
+    const findSort = paramKeys.find((item) => item.includes("sort_"));
+    if (
+      findSort &&
+      (String(params[findSort as keyof typeof params]).toUpperCase() ===
+        "DESC" ||
+        String(params[findSort as keyof typeof params]).toUpperCase() === "ASC")
+    ) {
+      const sortField = findSort.split("_")[findSort.split("_").length - 1];
+      if (entityKeys.includes(sortField)) {
+        result.push({
+          $sort: {
+            [sortField]:
+              String(params[findSort as keyof typeof params]).toUpperCase() ===
+              "ASC"
+                ? 1
+                : -1,
+          },
+        });
+      }
+    }
+    const findGreater = paramKeys.find((item) => item.includes("greater_"));
+    if (
+      findGreater &&
+      Number.isFinite(Number(params[findGreater as keyof typeof params]))
+    ) {
+      const greaterField =
+        findGreater.split("_")[findGreater.split("_").length - 1];
+      if (
+        entityKeys.includes(greaterField) &&
+        Number.isFinite(Number(entity[greaterField as keyof typeof entity]))
+      ) {
+        result.push({
+          $match: {
+            [greaterField]: {
+              $gte: Number(params[findGreater as keyof typeof params]),
+            },
+          },
+        });
+      }
+    }
+    const findLower = paramKeys.find((item) => item.includes("lower_"));
+    if (
+      findLower &&
+      Number.isFinite(Number(params[findLower as keyof typeof params]))
+    ) {
+      const lowerField = findLower.split("_")[findLower.split("_").length - 1];
+      if (
+        entityKeys.includes(lowerField) &&
+        Number.isFinite(Number(entity[lowerField as keyof typeof entity]))
+      ) {
+        result.push({
+          $match: {
+            [lowerField]: {
+              $lte: Number(params[findLower as keyof typeof params]),
+            },
+          },
+        });
+      }
+    }
     return result;
   }
 
