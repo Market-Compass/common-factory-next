@@ -1,4 +1,5 @@
 import { AnyKeys, PipelineStage } from "mongoose";
+
 import { connect } from "../custom-mongoose";
 import logger from "../logger";
 import { PipelineResponse } from "../types";
@@ -34,23 +35,26 @@ export async function findFunc<T>(
       size = sizeProp;
     }
     try {
+      const count = (await data.aggregate([
+        ...pipelines,
+        {
+          $count: "total",
+        },
+      ])) as unknown as { total: number }[];
+      logger.info([count as any]);
       const thisResult = await data.aggregate([
         ...pipelines,
         {
-          $facet: {
-            metadata: [
-              {
-                $count: "total",
-              },
-            ],
-            data: [{ $skip: page - 1 }, { $limit: size }],
-          },
+          $skip: (page - 1) * size,
+        },
+        {
+          $limit: size,
         },
       ]);
       return {
         result: {
-          data: thisResult[0].data,
-          total: thisResult[0].metadata[0]?.total || 0,
+          data: thisResult,
+          total: count[0]?.total || 0,
           page,
           size,
         },
