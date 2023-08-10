@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import logger from "../logger";
-
+import * as logger from "npmlog";
 // CONNECTING TO MONGOOSE (Get Database Url from .env.local)
 
 // connection function
 export const connect = async (schema: any, keySchema: string) => {
   const { DATABASE_URL } = process.env;
+  logger.enableColor();
 
   type TResult = {
     result?: {
@@ -23,7 +23,7 @@ export const connect = async (schema: any, keySchema: string) => {
     const result: TResult = { result: { conn, data } };
     return result;
   } catch (error: any) {
-    logger.error([error.message]);
+    logger.error("connect-mongoose", "-common-mongoose", String(error.message));
     const result: TResult = { error: error.message };
     return result;
   }

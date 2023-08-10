@@ -1,7 +1,8 @@
+import * as logger from "npmlog";
+
 import { AnyKeys, PipelineStage } from "mongoose";
 
 import { connect } from "../custom-mongoose";
-import logger from "../logger";
 import { PipelineResponse } from "../types";
 
 export async function findFunc<T>(
@@ -18,6 +19,7 @@ export async function findFunc<T>(
     size: number;
   }>
 > {
+  logger.enableColor();
   const { result, error } = await connect(schema, keySchema);
   if (error) {
     return {
@@ -41,7 +43,7 @@ export async function findFunc<T>(
           $count: "total",
         },
       ])) as unknown as { total: number }[];
-      logger.info([count as any]);
+      logger.log("repository", "-repo", String(count));
       const thisResult = await data.aggregate([
         ...pipelines,
         {
@@ -60,7 +62,7 @@ export async function findFunc<T>(
         },
       };
     } catch (error: any) {
-      logger.error([error.message]);
+      logger.error("repository", "-repo", String(error.message));
       return {
         error: error.message,
       };
@@ -77,6 +79,8 @@ export async function findOneFunc<T>(
   value: any,
   field: string
 ): Promise<PipelineResponse<T>> {
+  logger.enableColor();
+
   const { result, error } = await connect(schema, keySchema);
   if (error) {
     return {
@@ -97,7 +101,7 @@ export async function findOneFunc<T>(
         result: thisResult[0],
       };
     } catch (error: any) {
-      logger.error([error.message]);
+      logger.error("repository", "-repo", String(error.message));
       return {
         error: error.message,
       };
@@ -113,6 +117,8 @@ export async function insertManyFunc<T>(
   keySchema: string,
   entities: T[]
 ): Promise<PipelineResponse<string>> {
+  logger.enableColor();
+
   const { result, error } = await connect(schema, keySchema);
   if (error) {
     return {
@@ -127,7 +133,7 @@ export async function insertManyFunc<T>(
         result: "success",
       };
     } catch (error: any) {
-      logger.error([error.message]);
+      logger.error("repository", "-repo", String(error.message));
       return {
         error: error.message,
       };
@@ -143,6 +149,8 @@ export async function updateManyFunc<T>(
   keySchema: string,
   entities: T[]
 ): Promise<PipelineResponse<string>> {
+  logger.enableColor();
+
   const { result, error } = await connect(schema, keySchema);
   if (error) {
     return {
@@ -163,7 +171,7 @@ export async function updateManyFunc<T>(
         result: "success",
       };
     } catch (error: any) {
-      logger.error([error.message]);
+      logger.error("repository", "-repo", String(error.message));
       return {
         error: error.message,
       };
@@ -179,6 +187,8 @@ export async function deleteFunc(
   keySchema: string,
   ids: string[]
 ): Promise<PipelineResponse<string>> {
+  logger.enableColor();
+
   const { result, error } = await connect(schema, keySchema);
   if (error) {
     return {
@@ -199,7 +209,7 @@ export async function deleteFunc(
         result: "success",
       };
     } catch (error: any) {
-      logger.error([error.message]);
+      logger.error("repository", "-repo", String(error.message));
       return {
         error: error.message,
       };

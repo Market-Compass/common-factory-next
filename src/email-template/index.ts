@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+import * as nodemailer from "nodemailer";
 
 type EmailPayload = {
   to: string | string[];

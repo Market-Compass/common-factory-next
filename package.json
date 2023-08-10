@@ -1,6 +1,6 @@
 {
-  "name": "common-abstract-fares-system",
-  "version": "1.0.19",
+  "name": "common-factory-next",
+  "version": "1.0.5",
   "description": "common-abstract using in fares project",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -15,10 +15,17 @@
   "author": "fares-admin",
   "license": "ISC",
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/nodemailer": "^6.4.9",
+    "@types/uuid": "^9.0.2",
     "bcrypt": "^5.1.0",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.1.1",
-    "nodemailer": "^6.9.3"
+    "nodemailer": "^6.4.9",
+    "npmlog": "^7.0.1",
+    "@types/npmlog": "^4.1.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "typescript": "^5.1.3"
