@@ -43,7 +43,7 @@ export async function findFunc<T>(
           $count: "total",
         },
       ])) as unknown as { total: number }[];
-      logger.info("repository", "get-list", String(count));
+      logger.info("repository", "get-list", `${count}`);
       const thisResult = await data.aggregate([
         ...pipelines,
         {

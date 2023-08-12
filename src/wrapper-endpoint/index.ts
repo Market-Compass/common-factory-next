@@ -8,7 +8,7 @@ export const wrapperEndpoint = async <T>(
     url?: string;
     query: { [x: string]: string };
     body: any;
-  },
+  } & any,
   method: "GET" | "PUT" | "POST" | "DELETE",
   serviceFunc: Promise<CommonResponse<T>>
 ): Promise<CommonResponse<T | string>> => {
