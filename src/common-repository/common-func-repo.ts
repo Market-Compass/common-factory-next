@@ -43,7 +43,7 @@ export async function findFunc<T>(
           $count: "total",
         },
       ])) as unknown as { total: number }[];
-      logger.log("repository", "-repo", String(count));
+      logger.info("repository", "get-list", String(count));
       const thisResult = await data.aggregate([
         ...pipelines,
         {
@@ -62,7 +62,7 @@ export async function findFunc<T>(
         },
       };
     } catch (error: any) {
-      logger.error("repository", "-repo", String(error.message));
+      logger.error("repository", "get-list", String(error.message));
       return {
         error: error.message,
       };
@@ -101,7 +101,7 @@ export async function findOneFunc<T>(
         result: thisResult[0],
       };
     } catch (error: any) {
-      logger.error("repository", "-repo", String(error.message));
+      logger.error("repository", "get-one", String(error.message));
       return {
         error: error.message,
       };
@@ -133,7 +133,7 @@ export async function insertManyFunc<T>(
         result: "success",
       };
     } catch (error: any) {
-      logger.error("repository", "-repo", String(error.message));
+      logger.error("repository", "insert", String(error.message));
       return {
         error: error.message,
       };
@@ -171,7 +171,7 @@ export async function updateManyFunc<T>(
         result: "success",
       };
     } catch (error: any) {
-      logger.error("repository", "-repo", String(error.message));
+      logger.error("repository", "update", String(error.message));
       return {
         error: error.message,
       };
@@ -209,7 +209,7 @@ export async function deleteFunc(
         result: "success",
       };
     } catch (error: any) {
-      logger.error("repository", "-repo", String(error.message));
+      logger.error("repository", "delete", String(error.message));
       return {
         error: error.message,
       };
