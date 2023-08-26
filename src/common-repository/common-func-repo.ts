@@ -5,6 +5,50 @@ import { AnyKeys, PipelineStage } from "mongoose";
 import { connect } from "../custom-mongoose";
 import { PipelineResponse } from "../types";
 
+export async function findNoPaginationFunc<T>(
+  schema: any,
+  keySchema: string,
+  pipelines: PipelineStage[]
+): Promise<
+  PipelineResponse<{
+    data: T[];
+  }>
+> {
+  logger.enableColor();
+  const { result, error } = await connect(schema, keySchema);
+  if (error) {
+    return {
+      error,
+    };
+  }
+  if (result) {
+    const { data } = result;
+    try {
+      const count = (await data.aggregate([
+        ...pipelines,
+        {
+          $count: "total",
+        },
+      ])) as unknown as { total: number }[];
+      logger.info("repository", "get-list", `${count}`);
+      const thisResult = await data.aggregate([...pipelines]);
+      return {
+        result: {
+          data: thisResult,
+        },
+      };
+    } catch (error: any) {
+      logger.error("repository", "get-list", String(error.message));
+      return {
+        error: error.message,
+      };
+    }
+  }
+  return {
+    error: "no result",
+  };
+}
+
 export async function findFunc<T>(
   schema: any,
   keySchema: string,

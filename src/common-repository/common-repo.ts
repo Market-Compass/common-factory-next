@@ -4,6 +4,7 @@ import { CommonListResult, PipelineResponse } from "../types";
 import {
   deleteFunc,
   findFunc,
+  findNoPaginationFunc,
   findOneFunc,
   insertManyFunc,
   updateManyFunc,
@@ -54,6 +55,23 @@ export class CommonRepository<T> {
       this.collection,
       value,
       field
+    );
+    return result;
+  }
+
+  async findNoPagination(
+    pipeLine: PipelineStage[]
+  ): Promise<PipelineResponse<{ data: T[] }>> {
+    logger.enableColor();
+    logger.info(
+      "repository",
+      "params-get-one",
+      `get no pagination pipe: ${String(pipeLine)}`
+    );
+    const result = await findNoPaginationFunc<T>(
+      this.schema,
+      this.collection,
+      pipeLine
     );
     return result;
   }
