@@ -1,5 +1,7 @@
 import * as nodemailer from "nodemailer";
 
+import { logger } from "..";
+
 type EmailPayload = {
   to: string | string[];
   subject: string;
@@ -25,8 +27,21 @@ export const sendEmail = async (
     ...smtpOptions,
   });
 
-  return await transporter.sendMail({
-    from: sentFrom,
-    ...data,
+  return await new Promise((res, rej) => {
+    transporter.sendMail(
+      {
+        from: sentFrom,
+        ...data,
+      },
+      (err, info) => {
+        if (err) {
+          logger.enableColor();
+          logger.error("send email", "send email err", String(err));
+          rej(err);
+        } else {
+          res(info);
+        }
+      }
+    );
   });
 };
