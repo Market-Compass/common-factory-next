@@ -1,47 +1,35 @@
-import * as nodemailer from "nodemailer";
+import axios from "axios";
 
-import { logger } from "..";
-
-type EmailPayload = {
-  to: string | string[];
+export const sendEmail = async ({
+  content,
+  to,
+  from,
+  subject,
+}: {
+  content: string;
+  to: string[];
+  from: string;
   subject: string;
-  html: string;
-};
-
-type ServerMailOptions = {
-  host: string;
-  port: number;
-  secure: boolean;
-  auth: {
-    user: string;
-    pass: string;
-  };
-};
-
-export const sendEmail = async (
-  smtpOptions: ServerMailOptions,
-  sentFrom: string,
-  data: EmailPayload
-) => {
-  const transporter = nodemailer.createTransport({
-    ...smtpOptions,
-  });
-
-  return await new Promise((res, rej) => {
-    transporter.sendMail(
+}) => {
+  const { RESEND_API_KEY } = process.env;
+  try {
+    const res = axios.post(
+      "https://api.resend.com/emails",
       {
-        from: sentFrom,
-        ...data,
+        from,
+        to,
+        subject,
+        html: content,
       },
-      (err, info) => {
-        if (err) {
-          logger.enableColor();
-          logger.error("send email", "send email err", String(err));
-          rej(err);
-        } else {
-          res(info);
-        }
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+        },
       }
     );
-  });
+    return (await res).data;
+  } catch (err) {
+    return err;
+  }
 };
