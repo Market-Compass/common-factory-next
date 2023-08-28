@@ -1,6 +1,6 @@
 {
   "name": "common-factory-next",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "common-abstract using in fares project",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

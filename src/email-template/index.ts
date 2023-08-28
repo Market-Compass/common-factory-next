@@ -5,11 +5,13 @@ export const sendEmail = async ({
   to,
   from,
   subject,
+  cc,
 }: {
   content: string;
   to: string[];
   from: string;
   subject: string;
+  cc?: string[];
 }) => {
   const { RESEND_API_KEY } = process.env;
   try {
@@ -20,6 +22,7 @@ export const sendEmail = async ({
         to,
         subject,
         html: content,
+        cc,
       },
       {
         headers: {
