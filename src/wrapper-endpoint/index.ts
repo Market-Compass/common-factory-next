@@ -3,19 +3,24 @@ import * as logger from "npmlog";
 import { CommonResponse } from "../types";
 
 export const wrapperEndpoint = async <T>(
-  req: {
-    method?: string;
-    url?: string;
-    query: { [x: string]: string };
-    body: any;
-  } & any,
+  req: any,
   method: "GET" | "PUT" | "POST" | "DELETE",
-  serviceFunc: Promise<CommonResponse<T>>
+  serviceFunc: Promise<CommonResponse<T>>,
+  referer?: string
 ): Promise<CommonResponse<T | string>> => {
   logger.enableColor();
   try {
     if (req.url) {
       logger.info("controller", "request-url", req.url);
+    }
+    if (referer && !referer.includes(process.env.HOST || "")) {
+      logger.info("controller", "host", req.headers.referer);
+      return {
+        success: false,
+        message: "not support",
+        result: "",
+        status: 401,
+      };
     }
     if (req.query) {
       Object.keys(req.query).map((item) => {
