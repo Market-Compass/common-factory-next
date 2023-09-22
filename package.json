@@ -1,18 +1,21 @@
 {
-  "name": "common-factory-next",
-  "version": "1.0.21",
-  "description": "common-abstract using in fares project",
+  "name": "@colop/common-factory-next",
+  "version": "1.0.1",
+  "description": "common-abstract using in colop team",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "prepare": "npm run build",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "fares-admin",
+  "author": "ericchentch",
   "license": "ISC",
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -30,5 +33,23 @@
   },
   "devDependencies": {
     "typescript": "^5.1.3"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/colop-dev/common-factory.git"
+  },
+  "keywords": [
+    "common",
+    "library",
+    "for",
+    "next",
+    "project"
+  ],
+  "bugs": {
+    "url": "https://gitlab.com/colop-dev/common-factory/issues"
+  },
+  "homepage": "https://gitlab.com/colop-dev/common-factory#readme"
 }
