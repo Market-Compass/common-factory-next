@@ -1,11 +1,6 @@
 name: publish @colop/common-factory-next
 
 on:
-  pull_request:
-    branches:
-      - main
-    types:
-      - closed
   push:
     branches:
       - main
