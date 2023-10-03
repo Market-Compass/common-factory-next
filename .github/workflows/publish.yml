@@ -21,6 +21,12 @@ jobs:
         run: yarn
       - name: build packages
         run: yarn build
+      - name: Cache node modules
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: ./node_modules
+          key: ${{ github.sha }}
 
   publish-package:
     runs-on: ubuntu-latest
@@ -33,6 +39,12 @@ jobs:
         with:
           node-version: "16.x"
           registry-url: https://registry.npmjs.org
+      - name: Reuse node modules
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: ./node_modules
+          key: ${{ github.sha }}
       - name: publish
         run: npm publish --access public
         env:
