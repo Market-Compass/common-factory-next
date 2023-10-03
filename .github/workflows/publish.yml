@@ -24,7 +24,7 @@ jobs:
 
   publish-package:
     runs-on: ubuntu-latest
-    eeds: [test-package]
+    needs: [test-package]
     if: ${{ success() }}
     steps:
       - uses: actions/checkout@v3
