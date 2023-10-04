@@ -1,4 +1,4 @@
-name: publish @colop/common-factory-next
+name: publish @mc/common-factory-next
 
 on:
   push:

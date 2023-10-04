@@ -1,4 +1,4 @@
-name: publish @colop/common-factory-next
+name: check mr @mc/common-factory-next
 
 on:
   pull_request:
