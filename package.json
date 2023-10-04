@@ -1,6 +1,6 @@
 {
-  "name": "@colop/common-factory-next",
-  "version": "1.0.1",
+  "name": "@mc/common-factory-next",
+  "version": "1.0.0",
   "description": "common-abstract using in colop team",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
