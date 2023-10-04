@@ -1,7 +1,7 @@
 {
-  "name": "@mc/common-factory-next",
+  "name": "@market-compass/common-factory-next",
   "version": "1.0.0",
-  "description": "common-abstract using in colop team",
+  "description": "common-abstract using in @market-compass team",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [

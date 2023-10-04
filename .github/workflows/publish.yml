@@ -1,4 +1,4 @@
-name: publish @mc/common-factory-next
+name: publish @market-compass/common-factory-next
 
 on:
   push:
