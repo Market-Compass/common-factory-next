@@ -6,7 +6,7 @@ const path = require("path");
 const getPackageLatestVersion = async () => {
   return new Promise((resolve, reject) => {
     https
-      .get(`https://registry.npmjs.org/@colop/common-factory-next`, (resp) => {
+      .get(`https://registry.npmjs.org/@market-compass/common-factory-next`, (resp) => {
         let data = "";
         resp.on("data", (chunk) => {
           data += chunk;
